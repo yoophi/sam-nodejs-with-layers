@@ -14,6 +14,8 @@ Resources:
     Properties:
       CodeUri: hello-world/
       Handler: app.lambdaHandler
+      Layers:
+        - !Ref TempConversionDepLayer
       Runtime: nodejs14.x
       Architectures:
         - x86_64
@@ -23,6 +25,17 @@ Resources:
           Properties:
             Path: /{conversion}/{value}
             Method: get
+
+  TempConversionDepLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: sam-app-dependencies
+      Description: Dependencies or sam app [temp-units-conv]
+      ContentUri: dependencies/
+      CompatibleRuntimes:
+        - nodejs14.x
+      LicenseInfo: 'MIT'
+      RetentionPolicy: Retain
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
